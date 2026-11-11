@@ -7,17 +7,35 @@
     <title>Nitish Kumar | Marriage Biodata</title>
     <meta name="description" content="Marriage biodata of Nitish Kumar, Assistant Manager (Engineer) from Saharsa, Bihar." />
 
-    <!-- Open Graph (WhatsApp / Facebook link preview).
-         After deploying, change og:image and og:url to your full site link,
-         e.g. https://your-site.netlify.app/photo.jpg -->
+    <!-- Personal biodata with a phone number: keep it out of Google search results.
+         (Link previews on WhatsApp still work.) Delete this line if you want it searchable. -->
+    <meta name="robots" content="noindex, nofollow" />
+
+    <!-- Link preview (WhatsApp / Facebook / Telegram).
+         __SITE_URL__ is filled in automatically at build time on Vercel and Netlify
+         (see vite.config.js), because WhatsApp needs a full https:// image link. -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Nitish Kumar - Marriage Biodata" />
     <meta property="og:title" content="Nitish Kumar - Marriage Biodata" />
     <meta property="og:description" content="Assistant Manager (Engineer) | Saharsa, Bihar. Tap to view the complete biodata." />
-    <meta property="og:image" content="/photo.jpg" />
-    <meta property="og:url" content="/" />
+    <meta property="og:url" content="__SITE_URL__/" />
+    <meta property="og:image" content="__SITE_URL__/og-image.jpg" />
+    <meta property="og:image:secure_url" content="__SITE_URL__/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Nitish Kumar - Marriage Biodata" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Nitish Kumar - Marriage Biodata" />
+    <meta name="twitter:description" content="Assistant Manager (Engineer) | Saharsa, Bihar." />
+    <meta name="twitter:image" content="__SITE_URL__/og-image.jpg" />
 
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85' fill='%23d4af37'>ॐ</text></svg>" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- start downloading the hero photo early so it's ready when the doors open -->
+    <link rel="preload" as="image" href="/photo-hero.webp" type="image/webp" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -26,6 +44,11 @@
     />
   </head>
   <body>
+    <noscript>
+      <p style="padding:24px;font-family:sans-serif;color:#fff8ec;background:#2e0710;text-align:center">
+        Please enable JavaScript to view Nitish Kumar's marriage biodata.
+      </p>
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

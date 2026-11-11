@@ -11,7 +11,6 @@ import PersonalDetails from './components/PersonalDetails.jsx';
 import FamilyTree from './components/FamilyTree.jsx';
 import EducationJourney from './components/EducationJourney.jsx';
 import CareerShowcase from './components/CareerShowcase.jsx';
-import Timeline from './components/Timeline.jsx';
 import Gallery from './components/Gallery.jsx';
 import Contact from './components/Contact.jsx';
 import FloatingButtons from './components/FloatingButtons.jsx';
@@ -94,7 +93,8 @@ export default function App() {
 
         <section className="section" id="career">
           <Title title="Career" />
-          {/* To go back to the simple timeline, replace the next line with: <Timeline items={career} /> */}
+          {/* To go back to the simple timeline: import Timeline from './components/Timeline.jsx'
+              and replace the next line with: <Timeline items={career} /> */}
           <CareerShowcase jobs={career} stats={careerStats} />
           <div className="income-wrap">
             <InfoGrid items={[income]} single />

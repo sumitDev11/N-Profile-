@@ -15,6 +15,14 @@
   --f-quote: 'Cormorant Garamond', serif;
   --f-body: 'Poppins', system-ui, sans-serif;
   --radius: 16px;
+  /* viewport units used across the CSS (overridden by src/desktopMode.js in phone "Desktop site" mode) */
+  --vw: 1vw;
+  --vh: 1vh;
+}
+@supports (height: 1svh) {
+  :root {
+    --vh: 1svh;
+  }
 }
 
 *,
@@ -89,6 +97,11 @@ a {
 }
 .scene3d canvas {
   pointer-events: none !important;
+}
+/* phone "Desktop site" mode zooms the page; the 3D canvas sizes itself in real pixels,
+   so cancel the zoom for it (otherwise it would be enlarged twice) */
+html.dm .scene3d {
+  zoom: calc(1 / var(--dm-zoom, 1));
 }
 
 .page {
@@ -563,8 +576,9 @@ a {
 /* ---------------- Hero ---------------- */
 .hero {
   position: relative;
-  min-height: 100vh;
-  min-height: 100svh;
+  /* full screen height, but never a giant empty block on very tall screens */
+  min-height: min(100vh, 1000px);
+  min-height: min(100svh, 1000px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -898,18 +912,6 @@ a {
   }
 }
 
-.hero-sub {
-  font-family: var(--f-head);
-  font-size: clamp(0.85rem, 3.4vw, 1.1rem);
-  letter-spacing: 0.06em;
-  margin: 0;
-  color: var(--cream);
-}
-.hero-sub .sep {
-  color: var(--gold);
-  margin: 0 0.4rem;
-}
-
 .divider {
   display: flex;
   align-items: center;
@@ -948,45 +950,6 @@ a {
 }
 .scroll-down svg {
   animation: arrowBounce 1.8s ease-in-out infinite;
-}
-
-/* ---------------- Quick facts ---------------- */
-.facts {
-  position: relative;
-  z-index: 3;
-  margin: -70px auto 0;
-  padding: 0 16px;
-  max-width: 1000px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-}
-.fact-card {
-  background: var(--cream);
-  color: var(--maroon);
-  border-radius: var(--radius);
-  border-bottom: 4px solid var(--gold);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
-  padding: 1.3rem 0.8rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  height: 100%;
-}
-.fact-icon {
-  font-size: 1.6rem;
-  color: var(--gold);
-  margin-bottom: 0.3rem;
-}
-.fact-card strong {
-  font-family: var(--f-head);
-  font-size: 1.1rem;
-}
-.fact-card span {
-  font-size: 0.8rem;
-  color: #7a4a3a;
 }
 
 /* ---------------- Sections ---------------- */
@@ -2472,35 +2435,6 @@ a {
     box-shadow: 0 0 46px rgba(212, 175, 55, 0.85), inset 0 0 30px rgba(212, 175, 55, 0.5);
   }
 }
-@keyframes haloPulse {
-  0%,
-  100% {
-    opacity: 0.7;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
-@keyframes pulseGlow {
-  0%,
-  100% {
-    box-shadow: 0 0 18px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.15);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.75), 0 0 70px rgba(212, 175, 55, 0.3);
-  }
-}
-@keyframes bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
 @keyframes arrowBounce {
   0%,
   100% {
@@ -2602,15 +2536,75 @@ a {
   .text-box {
     padding: 1.6rem 1.2rem;
   }
-  .fact-card {
-    padding: 1.1rem 0.5rem;
-  }
   .contact-actions .btn {
     flex: 1 1 100%;
   }
   .glass {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
+  }
+}
+
+/* ---------------- Short screens (phone held sideways) ---------------- */
+@media (max-height: 520px) and (orientation: landscape) {
+  /* welcome screen: everything must fit so "Open Biodata" is reachable */
+  .intro-inner {
+    margin-top: 28px;
+  }
+  .om-wrap {
+    width: 74px;
+    height: 74px;
+  }
+  .om-ring {
+    width: 62px;
+    height: 62px;
+  }
+  .om-spin {
+    font-size: 1.8rem;
+  }
+  .intro-name {
+    font-size: clamp(2.2rem, 13vh, 3.6rem);
+    margin-top: 0.4rem;
+  }
+  .intro-sub {
+    margin: 0.1rem 0 0.9rem;
+  }
+  .intro-btn {
+    padding: 0.7rem 1.6rem;
+    font-size: 0.95rem;
+  }
+  .toran .strand {
+    display: none;
+  }
+  .knob {
+    display: none;
+  }
+  /* hero photo: sized by screen height so it doesn't fill the whole view */
+  .portrait-col {
+    width: min(80vw, 360px, 62vh);
+  }
+  .hero {
+    padding-top: 40px;
+  }
+  .stat-card {
+    top: 2%;
+    right: -18%;
+    padding: 0.45rem 0.6rem;
+    border-radius: 12px;
+  }
+  .stat-card strong {
+    font-size: 1.3rem;
+  }
+  .stat-card span {
+    font-size: 0.55rem;
+    max-width: 58px;
+    margin-top: 0.15rem;
+  }
+  .float-orb {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+    left: -12%;
   }
 }
 

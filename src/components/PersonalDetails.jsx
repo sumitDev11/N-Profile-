@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { FaIdCard, FaLeaf } from 'react-icons/fa';
 import Reveal from './Reveal.jsx';
 import { getIcon } from '../icons.js';
-import { calcAge } from './QuickFacts.jsx';
+import { calcAge } from '../utils.js';
 import { profile, rashiNames } from '../data.js';
 
 function Row({ item }) {

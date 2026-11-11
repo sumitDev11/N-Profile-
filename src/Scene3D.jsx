@@ -10,7 +10,10 @@ const reduced =
 function Rings() {
   const group = useRef();
   const { size, viewport } = useThree();
-  const mobile = size.width < 768;
+  // phone layout for narrow screens, any tall/portrait screen, and phones in "Desktop site" mode
+  const isMobile = () =>
+    size.width < 768 || size.width / size.height < 0.8 || document.documentElement.classList.contains('dm');
+  const mobile = isMobile();
 
   const goldMat = useMemo(
     () =>
@@ -36,6 +39,7 @@ function Rings() {
     // In the hero the rings glow softly *behind* the glass photo frame,
     // then glide out to their resting place as the page scrolls.
     const inHero = scroll < window.innerHeight * 0.5;
+    const mobile = isMobile();
     const tx = inHero ? (mobile ? 0 : viewport.width * 0.21) : mobile ? 0 : viewport.width * 0.3;
     const ty = inHero ? viewport.height * (mobile ? 0.14 : 0.02) : (mobile ? 0.4 : 0.1) - p * (mobile ? 1 : 0.6);
     const ts = inHero ? (mobile ? 0.3 : 0.55) : mobile ? 0.5 : 0.8;
@@ -123,7 +127,12 @@ function Petals({ count }) {
 }
 
 export default function Scene3D() {
-  const mobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  // fewer petals/sparkles + no antialiasing on phones (incl. "Desktop site" mode) to keep 60fps
+  const mobile =
+    typeof window !== 'undefined' &&
+    (window.innerWidth < 768 ||
+      window.matchMedia('(pointer: coarse)').matches ||
+      document.documentElement.classList.contains('dm'));
 
   return (
     <div className="scene3d" aria-hidden="true">
