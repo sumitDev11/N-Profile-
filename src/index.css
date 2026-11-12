@@ -983,6 +983,10 @@ a {
   grid-template-columns: minmax(0, 360px);
   justify-content: center;
 }
+/* single highlight card (Annual Income): icon + text centred in the card */
+.info-grid.single .info-card {
+  justify-content: center;
+}
 .info-card {
   display: flex;
   align-items: center;
