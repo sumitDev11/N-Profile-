@@ -76,7 +76,10 @@ export default function FamilyTree({ tree }) {
 
       {tree.nativePlace && (
         <Reveal className="ft-native" delay={0.3}>
-          <FaHome /> Native Place: <strong>{tree.nativePlace}</strong>
+          <span className="ft-native-label">
+            <FaHome /> Native Place
+          </span>
+          <strong>{tree.nativePlace.trim()}</strong>
         </Reveal>
       )}
     </div>

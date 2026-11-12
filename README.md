@@ -73,9 +73,8 @@ WhatsApp caches previews. Share the link with `?v=2` added at the end, or check 
 - The page has `noindex` so it doesn't appear in Google search (it contains a phone number).
   Remove the `robots` meta tag in `index.html` if you want it searchable.
 - If a phone can't run the 3D background (no WebGL), the biodata still works without it.
-- Phones switched to **"Desktop site"** mode still get the proper mobile layout at a readable size
-  (`src/desktopMode.js` + a small PostCSS step in `vite.config.js`). To preview it on a computer,
-  open the site with `?dm=412` at the end of the address and make the window ~980px wide.
+- Phones switched to **"Desktop site"** mode get the desktop layout (shrunk to fit), like any
+  desktop website. To preview it on a computer, make the browser window ~980px wide and very tall.
 - "Download PDF" uses the browser's print dialog with a dedicated print layout.
 
 ---

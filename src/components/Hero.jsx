@@ -103,11 +103,6 @@ export default function Hero({ opened }) {
               draggable="false"
             />
 
-            <motion.div className="float-card stat-card" variants={pop} initial="hidden" animate={state} custom={0}>
-              <strong>{heroHighlights.experienceValue}</strong>
-              <span>{heroHighlights.experienceLabel}</span>
-            </motion.div>
-
             <motion.div className="float-orb" variants={pop} initial="hidden" animate={state} custom={2} aria-hidden="true">
               <FaOm />
             </motion.div>

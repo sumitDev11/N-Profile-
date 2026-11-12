@@ -10,10 +10,11 @@ const reduced =
 function Rings() {
   const group = useRef();
   const { size, viewport } = useThree();
-  // phone layout for narrow screens, any tall/portrait screen, and phones in "Desktop site" mode
-  const isMobile = () =>
-    size.width < 768 || size.width / size.height < 0.8 || document.documentElement.classList.contains('dm');
-  const mobile = isMobile();
+  const mobile = size.width < 768;
+  // the 3D camera sizes things by screen *height*; on tall screens (e.g. a phone in "Desktop site"
+  // mode, ~980x2100) keep the rings in proportion to the screen *width* instead
+  const widthFit = mobile ? 1 : Math.min(1, size.width / size.height / 1.6);
+  const frameEl = useRef(null);
 
   const goldMat = useMemo(
     () =>
@@ -36,13 +37,23 @@ function Rings() {
     g.rotation.y = t * 0.25 + p * Math.PI * 4;
     g.rotation.x = 0.35 + Math.sin(t * 0.4) * 0.1 + p * 1.2;
 
-    // In the hero the rings glow softly *behind* the glass photo frame,
-    // then glide out to their resting place as the page scrolls.
+    // In the hero the rings glow softly *behind* the glass photo frame (measured on screen, so it
+    // works for every layout), then glide out to their resting place as the page scrolls.
     const inHero = scroll < window.innerHeight * 0.5;
-    const mobile = isMobile();
-    const tx = inHero ? (mobile ? 0 : viewport.width * 0.21) : mobile ? 0 : viewport.width * 0.3;
-    const ty = inHero ? viewport.height * (mobile ? 0.14 : 0.02) : (mobile ? 0.4 : 0.1) - p * (mobile ? 1 : 0.6);
-    const ts = inHero ? (mobile ? 0.3 : 0.55) : mobile ? 0.5 : 0.8;
+    let tx;
+    let ty;
+    let ts;
+    if (!frameEl.current || !frameEl.current.isConnected) frameEl.current = document.querySelector('.frame-wrap');
+    const r = inHero && frameEl.current ? frameEl.current.getBoundingClientRect() : null;
+    if (r && r.width > 0) {
+      tx = ((r.left + r.width / 2) / size.width - 0.5) * viewport.width;
+      ty = (0.5 - (r.top + r.height / 2) / size.height) * viewport.height;
+      ts = (0.6 * (r.width / size.width) * viewport.width) / 2.76; // ~60% of the frame width
+    } else {
+      tx = mobile ? 0 : viewport.width * 0.3;
+      ty = (mobile ? 0.4 : 0.1) - p * (mobile ? 1 : 0.6);
+      ts = (mobile ? 0.5 : 0.8) * widthFit;
+    }
     g.position.x = THREE.MathUtils.damp(g.position.x, tx, 2.5, delta);
     g.position.y = THREE.MathUtils.damp(g.position.y, ty, 2.5, delta);
     g.scale.setScalar(THREE.MathUtils.damp(g.scale.x, ts, 2.5, delta));
@@ -52,7 +63,7 @@ function Rings() {
     <group
       ref={group}
       position={[mobile ? 0 : viewport.width * 0.21, viewport.height * (mobile ? 0.14 : 0.02), 0]}
-      scale={mobile ? 0.3 : 0.55}
+      scale={(mobile ? 0.3 : 0.55) * widthFit}
     >
       <Float speed={reduced ? 0 : 1.4} rotationIntensity={0.3} floatIntensity={0.6}>
         <mesh material={goldMat} position={[-0.42, 0, 0]} rotation={[0, 0.5, 0]}>
@@ -127,12 +138,10 @@ function Petals({ count }) {
 }
 
 export default function Scene3D() {
-  // fewer petals/sparkles + no antialiasing on phones (incl. "Desktop site" mode) to keep 60fps
+  // fewer petals/sparkles + no antialiasing on phones/tablets (incl. "Desktop site" mode) to keep 60fps
   const mobile =
     typeof window !== 'undefined' &&
-    (window.innerWidth < 768 ||
-      window.matchMedia('(pointer: coarse)').matches ||
-      document.documentElement.classList.contains('dm'));
+    (window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches);
 
   return (
     <div className="scene3d" aria-hidden="true">

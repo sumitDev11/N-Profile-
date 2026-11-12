@@ -15,14 +15,6 @@
   --f-quote: 'Cormorant Garamond', serif;
   --f-body: 'Poppins', system-ui, sans-serif;
   --radius: 16px;
-  /* viewport units used across the CSS (overridden by src/desktopMode.js in phone "Desktop site" mode) */
-  --vw: 1vw;
-  --vh: 1vh;
-}
-@supports (height: 1svh) {
-  :root {
-    --vh: 1svh;
-  }
 }
 
 *,
@@ -97,11 +89,6 @@ a {
 }
 .scene3d canvas {
   pointer-events: none !important;
-}
-/* phone "Desktop site" mode zooms the page; the 3D canvas sizes itself in real pixels,
-   so cancel the zoom for it (otherwise it would be enlarged twice) */
-html.dm .scene3d {
-  zoom: calc(1 / var(--dm-zoom, 1));
 }
 
 .page {
@@ -720,19 +707,24 @@ html.dm .scene3d {
   padding: 1.4rem 0 0;
   margin: 2rem 0 0;
   border-top: 1px solid rgba(245, 221, 140, 0.18);
+  /* one item per line: stays tidy however long the address / company name is */
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.6rem 1.6rem;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  gap: 0.55rem;
   font-size: 0.86rem;
-  color: rgba(255, 248, 236, 0.7);
+  line-height: 1.4;
+  color: rgba(255, 248, 236, 0.75);
 }
 .hero-meta li {
   display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 .hero-meta svg {
+  flex: 0 0 auto;
+  margin-top: 0.22em;
   color: var(--gold);
 }
 
@@ -811,32 +803,6 @@ html.dm .scene3d {
   text-align: left;
   animation: floatY 5s ease-in-out infinite;
 }
-.stat-card {
-  top: 6%;
-  right: -6%;
-  padding: 0.8rem 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-.stat-card strong {
-  font-family: var(--f-body);
-  font-weight: 600;
-  font-size: 2rem;
-  line-height: 1;
-  background: var(--gold-grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-.stat-card span {
-  font-size: 0.66rem;
-  line-height: 1.3;
-  margin-top: 0.35rem;
-  max-width: 76px;
-  opacity: 0.85;
-}
 .float-orb {
   position: absolute;
   z-index: 3;
@@ -880,20 +846,11 @@ html.dm .scene3d {
   }
   .hero-meta {
     align-self: stretch;
+    align-items: flex-start;
   }
   .hero-name {
     font-size: min(4.6rem, 5vw);
     white-space: nowrap;
-  }
-  .stat-card {
-    padding: 1rem 1.2rem;
-  }
-  .stat-card strong {
-    font-size: 2.6rem;
-  }
-  .stat-card span {
-    font-size: 0.74rem;
-    max-width: 90px;
   }
   .float-orb {
     width: 68px;
@@ -2110,25 +2067,38 @@ html.dm .scene3d {
   opacity: 0.8;
   line-height: 1.35;
 }
+/* Native place: small label on top, address below — fits any length on any screen */
 .ft-native {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3rem;
+  width: min(100%, 520px);
   margin-top: 28px;
-  padding: 0.6rem 1.2rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: 18px;
+  text-align: center;
   border: 1px solid rgba(245, 221, 140, 0.45);
   background: rgba(46, 7, 16, 0.5);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 }
-.ft-native svg {
+.ft-native-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--f-head);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--gold);
 }
 .ft-native strong {
   color: var(--gold-light);
   font-weight: 600;
+  font-size: 0.98rem;
+  line-height: 1.4;
 }
 
 @media (min-width: 900px) {
@@ -2501,21 +2471,6 @@ html.dm .scene3d {
     padding: 0.75rem 1.05rem;
     font-size: 0.82rem;
   }
-  /* smaller floating cards so they don't cover the photo */
-  .stat-card {
-    top: 3%;
-    right: -4%;
-    padding: 0.5rem 0.65rem;
-    border-radius: 14px;
-  }
-  .stat-card strong {
-    font-size: 1.45rem;
-  }
-  .stat-card span {
-    font-size: 0.56rem;
-    max-width: 60px;
-    margin-top: 0.2rem;
-  }
   .float-orb {
     width: 42px;
     height: 42px;
@@ -2621,15 +2576,25 @@ html.dm .scene3d {
 
 /* ---------------- Print / Download PDF ---------------- */
 @media print {
+  /* margin 0 = the browser has no room for its own header/footer
+     (date, page title, web address, page numbers), so the PDF stays clean */
   @page {
-    margin: 12mm;
+    size: A4;
+    margin: 0;
   }
   html,
   body {
+    margin: 0 !important;
     background: #fff !important;
     color: var(--maroon) !important;
     height: auto !important;
     overflow: visible !important;
+  }
+  /* white space around the content instead of page margins, repeated on every page */
+  .page {
+    padding: 12mm 12mm !important;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
   .scene3d,
   .bg-pattern,
@@ -2638,7 +2603,9 @@ html.dm .scene3d {
   .contact-actions,
   .scroll-down,
   .lightbox,
-  .corner {
+  .corner,
+  .credit,
+  #moments .subtitle {
     display: none !important;
   }
   * {

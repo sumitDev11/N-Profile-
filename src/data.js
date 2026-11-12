@@ -8,7 +8,7 @@ export const profile = {
   dob: '1999-04-16', // YYYY-MM-DD — age is calculated automatically
   dobDisplay: '16 April 1999',
   designation: 'Assistant Manager (Engineer)',
-  city: 'Saharsa',
+  city: 'VPO- Saharsa, Dist. Saharsa',
   state: 'Bihar',
   height: '5\' 11"',
   experience: '5+ yrs experience',
@@ -18,10 +18,8 @@ export const profile = {
 
 // Small highlights shown in the top (hero) section
 export const heroHighlights = {
-  experienceValue: '5+',
-  experienceLabel: 'Years of Experience',
   education: 'B.Tech, VIT Jaipur',
-  company: 'Desire Energy Solutions',
+  company: 'Desire Energy Solutions Pvt. Ltd.',
 };
 
 // Photos & song live in the /public folder
@@ -87,7 +85,7 @@ export const education = [
 export const career = [
   {
     current: true,
-    period: 'Oct 2023 – Present',
+    period: 'Oct 2021 – Present',
     role: 'Assistant Manager',
     company: 'Desire Energy Solutions Pvt. Ltd., Jaipur',
     projectValue: '₹443.6 Cr',
@@ -124,7 +122,7 @@ export const careerStats = [
   { value: 2, label: 'Major government projects' },
 ];
 
-export const income = { icon: 'money', label: 'Annual Income', value: 'On request' };
+export const income = { icon: 'money', label: 'Annual Income', value: '8-10 LPA' };
 
 // Family tree — grandparents on top, one branch per son's family.
 // main: true marks my parents' branch (highlighted); me: true marks me.
@@ -151,7 +149,7 @@ export const familyTree = {
       main: true,
       parents: [
         { name: 'Mr. Sanjay Kumar Singh', role: 'Father' },
-        { name: 'Mrs. Guddi Singh', role: 'Mother' },
+        { name: 'Mrs. Sabita Singh', role: 'Mother' },
       ],
       children: [
         { name: 'Nitish Kumar', note: 'Assistant Manager (Engineer)', me: true },
@@ -162,7 +160,7 @@ export const familyTree = {
       title: 'Uncle & Aunty',
       parents: [
         { name: 'Mr. Ajit Kumar Singh', role: 'Uncle' },
-        { name: 'Mrs. Babli Devi', role: 'Aunty' },
+        { name: 'Mrs. Babli Singh', role: 'Aunty' },
       ],
       children: [
         { name: 'Prince Singh', note: 'Electronics & Communication Engineer' },
@@ -170,7 +168,7 @@ export const familyTree = {
       ],
     },
   ],
-  nativePlace: 'Saharsa, Bihar',
+  nativePlace: 'Village – Bardaha, Dist. Madhepura, Bihar ',
 };
 
 export const partnerExpectations =
